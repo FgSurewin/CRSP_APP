@@ -35,8 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loggerMiddleware = exports.logger = void 0;
+exports.log = exports.loggerMiddleware = exports.logger = exports.Yellow = exports.Green = exports.Red = void 0;
+var chalk_1 = __importDefault(require("chalk"));
+exports.Red = chalk_1.default.bold.red;
+exports.Green = chalk_1.default.bold.green;
+exports.Yellow = chalk_1.default.bold.yellow;
 var getTimeStamp = function () { return new Date().toISOString(); };
 var logger = function (namespace, message, object) {
     if (object) {
@@ -52,9 +59,9 @@ var loggerMiddleware = function (req, res, next) { return __awaiter(void 0, void
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                exports.logger(NAMESPACE, "[START] METHOD - [" + req.method + "], URL - [" + req.url + "], IP - [" + req.socket.remoteAddress + "]");
+                exports.logger(NAMESPACE, "[" + exports.Green("START") + "] METHOD - [" + req.method + "], URL - [" + req.url + "], IP - [" + req.socket.remoteAddress + "]");
                 res.on("finish", function () {
-                    exports.logger(NAMESPACE, "[END] METHOD - [" + req.method + "], URL - [" + req.url + "], IP - [" + req.socket.remoteAddress + "], STATUS - [" + res.statusCode + "]");
+                    exports.logger(NAMESPACE, "[" + exports.Yellow("END") + "] METHOD - [" + req.method + "], URL - [" + req.url + "], IP - [" + req.socket.remoteAddress + "], STATUS - [" + res.statusCode + "]");
                 });
                 return [4, next()];
             case 1:
@@ -64,3 +71,11 @@ var loggerMiddleware = function (req, res, next) { return __awaiter(void 0, void
     });
 }); };
 exports.loggerMiddleware = loggerMiddleware;
+var log = function (namespace) { return function (target, methodName, desc) {
+    var _func = desc.value;
+    desc.value = function (req, res, next) {
+        exports.logger(namespace, "METHOD - [" + req.method + "], URL - [" + req.url + "], IP - [" + req.socket.remoteAddress + "]");
+        _func.call(this, req, res, next);
+    };
+}; };
+exports.log = log;

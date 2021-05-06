@@ -42,30 +42,59 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var dotenv_1 = __importDefault(require("dotenv"));
+var image_1 = __importDefault(require("./routes/image"));
+var mongoose_1 = __importDefault(require("mongoose"));
+var nunjucks_1 = __importDefault(require("nunjucks"));
 var logger_1 = require("./config/logger");
-var app = express_1.default();
-dotenv_1.default.config();
-app.use(logger_1.loggerMiddleware);
-app.use(body_parser_1.default.json());
-app.use(body_parser_1.default.urlencoded({ extended: false }));
-app.use(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        res.json({
-            message: "Hello World",
+var database_1 = require("./database");
+(function () {
+    return __awaiter(this, void 0, void 0, function () {
+        var app, PORT, error_1;
+        var _this = this;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    app = express_1.default();
+                    PORT = process.env.PORT || 8080;
+                    app.use(express_1.default.static("./public"));
+                    nunjucks_1.default.configure("views", {
+                        autoescape: true,
+                        express: app,
+                    });
+                    dotenv_1.default.config();
+                    app.use(logger_1.loggerMiddleware);
+                    app.use(body_parser_1.default.json());
+                    app.use(body_parser_1.default.urlencoded({ extended: false }));
+                    app.use("/api/image", image_1.default);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4, mongoose_1.default.connect(database_1.config.link, database_1.config.options)];
+                case 2:
+                    _a.sent();
+                    logger_1.logger("DATABASE", "Connect to the MongoDB successfully!");
+                    return [3, 4];
+                case 3:
+                    error_1 = _a.sent();
+                    console.log(new Error(error_1));
+                    return [3, 4];
+                case 4:
+                    app.use(function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4, next()];
+                                case 1:
+                                    _a.sent();
+                                    res.render("index.html");
+                                    return [2];
+                            }
+                        });
+                    }); });
+                    app.listen(PORT, function () {
+                        return logger_1.logger("SERVER", "Server is running on http://localhost:" + PORT);
+                    });
+                    return [2];
+            }
         });
-        return [2];
     });
-}); });
-app.use(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var error;
-    return __generator(this, function (_a) {
-        error = new Error("NOT FOUND");
-        return [2, res.status(404).json({
-                code: 404,
-                message: error.message,
-            })];
-    });
-}); });
-app.listen(parseInt(process.env.PORT), function () {
-    return logger_1.logger("SERVER", "Server is running on http://localhost:" + process.env.PORT);
-});
+})();
