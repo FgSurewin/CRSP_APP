@@ -6,7 +6,8 @@
 	"scripts": {
 		"build": "rm -rf build/ && tsc && rm -rf build/public/ && cp -r public/ build/public/ && cp -r views/ build/views/",
 		"dev": "nodemon -x ts-node ./index.ts",
-		"start": "node build/index.js"
+		"start": "node build/index.js",
+		"concurrent": "npm run build && npm run start"
 	},
 	"keywords": [],
 	"author": "",
