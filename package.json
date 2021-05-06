@@ -9,7 +9,7 @@
 		"my-dev": "nodemon -x ts-node ./index.ts",
 		"start": "node build/index.js",
 		"concurrent": "npm run build && npm run start",
-		"deploy": "git add . && git commit -m Heroku && git push heroku master"
+		"deploy": "git add . && git commit -m Heroku-1 && git push heroku master"
 	},
 	"keywords": [],
 	"author": "",
