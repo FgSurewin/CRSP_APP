@@ -1,1 +1,1 @@
-web: npm run concurrent
+web: node build/index.js
