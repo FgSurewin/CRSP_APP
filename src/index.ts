@@ -13,10 +13,10 @@ import { config } from "./database";
 	const PORT = process.env.PORT || 8080;
 
 	// Read static files
-	app.use(express.static("./public"));
+	app.use(express.static("./src/public"));
 
 	// Template engine
-	nunjucks.configure("views", {
+	nunjucks.configure("src/views", {
 		autoescape: true,
 		express: app,
 	});
