@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const config = {
-	link: process.env.WEB_LINK!,
+	link: "mongodb+srv://test123:test123@cluster0.xsuns.mongodb.net/test?retryWrites=true&w=majority",
 	options: {
 		useNewUrlParser: true,
 		autoIndex: false,
